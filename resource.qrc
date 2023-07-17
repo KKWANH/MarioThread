@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/cars.png</file>
+        <file>res/mario.png</file>
+        <file>res/luigi.png</file>
+        <file>res/curby.gif</file>
+    </qresource>
+</RCC>
