@@ -360,7 +360,7 @@ void GameScene::createPixmap()
     int w = 28;
     int h = 32;
 
-    QString pathFile = ":/res/mario.png";
+    QString pathFile = ":/res/luigi.png";
     QPixmap tmp = QPixmap(pathFile);
     m_leftCarPixmap = tmp.copy(0, 0, w, h);
     m_upCarPixmap = tmp.copy(w * 1.25, 0, w * 1.2, h);
