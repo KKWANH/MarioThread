@@ -1,12 +1,12 @@
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 HEADERS += \
-    src/gamescene.h \
+    src/gamethread.h \
     src/utils.h \
     src/view.h
 
 SOURCES += \
-    src/gamescene.cpp \
+    src/gamethread.cpp \
     src/main.cpp \
     src/view.cpp
 

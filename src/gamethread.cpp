@@ -1,25 +1,29 @@
-#include "gamescene.h"
+#include "gamethread.h"
 #include <QKeyEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
+#include <QGraphicsView>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsSimpleTextItem>
 #include <QDir>
 #include <QPainter>
 #include "utils.h"
-#include <QtMath>
+#include <QtMath> 
 #include <algorithm>
 
+// -------------------------------------------------------------------------------------------------
+// GameSCene
+
 GameScene::GameScene(QObject *parent)
-    : QGraphicsScene(parent),
-      m_distance(0.0f),
-      m_curvature(0.0f),
-      m_trackCurvature(0.0f),
-      m_trackDistance(0.0f),
-      m_carPos(0.0f),
-      m_playerCurvature(0.0f),
-      m_speed(0.0f),
-      m_carDirection(0)
+:   QGraphicsScene(parent),
+    m_distance(0.0f),
+    m_curvature(0.0f),
+    m_trackCurvature(0.0f),
+    m_trackDistance(0.0f),
+    m_carPos(0.0f),
+    m_playerCurvature(0.0f),
+    m_speed(0.0f),
+    m_carDirection(0)
 {
     //
     onUserCreate(); // Create Map & Information
@@ -39,6 +43,7 @@ GameScene::GameScene(QObject *parent)
 
 void GameScene::loop()
 {
+    qDebug() << "GameScene loop launced!" << "\n";
     m_deltaTime = m_elapsedTimer.elapsed();
     m_elapsedTimer.restart();
 
@@ -281,7 +286,7 @@ void GameScene::onUserCreate()
 void GameScene::renderGameObjects()
 {
     clear();
-//Draw Background
+    //Draw Background
     QGraphicsPixmapItem* pItem = new QGraphicsPixmapItem();
 
     pItem->setPixmap(QPixmap::fromImage(m_image).scaled(SCREEN::PHYSICAL_SIZE));
@@ -289,7 +294,7 @@ void GameScene::renderGameObjects()
     addItem(pItem);
 
 
-//Draw Car
+    //Draw Car
     int nCarPos = SCREEN::PHYSICAL_SIZE.width() / 2 + ((int)(SCREEN::PHYSICAL_SIZE.width() * m_carPos) / 2.0) - 7*SCREEN::CELL_SIZE.width(); // Offset for sprite
     QSize carSpriteSize = QSize(14*SCREEN::CELL_SIZE.width(), 6*SCREEN::CELL_SIZE.height());
     int yCarPos = 80*SCREEN::CELL_SIZE.height();
@@ -302,7 +307,7 @@ void GameScene::renderGameObjects()
         pItem->setPos(nCarPos, yCarPos);
         addItem(pItem);
     }
-        break;
+    break;
 
     case +1:
     {
@@ -311,7 +316,7 @@ void GameScene::renderGameObjects()
         pItem->setPos(nCarPos, yCarPos);
         addItem(pItem);
     }
-        break;
+    break;
 
     case -1:
     {
@@ -320,39 +325,39 @@ void GameScene::renderGameObjects()
         pItem->setPos(nCarPos, yCarPos);
         addItem(pItem);
     }
-        break;
+    break;
     }
 
     drawString(0,0, "Distance:         " + QString::number(m_distance, 'f', 2) + " m");
-//    drawString(0,1, "Target Curvature: " + QString::number(m_curvature, 'f', 2));
-//    drawString(0,2, "Player Curvature: " + QString::number(m_playerCurvature, 'f', 2));
-//    drawString(0,3, "Player Speed:     " + QString::number(m_speed * 142) + " km/h");
-//    drawString(0, 4,"Track Curvature:  " + QString::number(m_trackCurvature, 'f', 2));
+    //    drawString(0,1, "Target Curvature: " + QString::number(m_curvature, 'f', 2));
+    //    drawString(0,2, "Player Curvature: " + QString::number(m_playerCurvature, 'f', 2));
+    //    drawString(0,3, "Player Speed:     " + QString::number(m_speed * 142) + " km/h");
+    //    drawString(0, 4,"Track Curvature:  " + QString::number(m_trackCurvature, 'f', 2));
 
-//    auto disp_time = [](float t) // Little lambda to turn floating point seconds into minutes:seconds:millis string
-//    {
-//        int nMinutes = t / 60.0f;
-//        int nSeconds = t - (nMinutes * 60.0f);
-//        int nMilliSeconds = (t - (float)nSeconds) * 1000.0f;
-//        if(nMilliSeconds > 100000)
-//        {
-//            nMilliSeconds = 99999;
-//        }
-//        return QString::number(nMinutes) + "." + QString::number(nSeconds) + ":" + QString::number(nMilliSeconds);
-//    };
+    //    auto disp_time = [](float t) // Little lambda to turn floating point seconds into minutes:seconds:millis string
+    //    {
+    //        int nMinutes = t / 60.0f;
+    //        int nSeconds = t - (nMinutes * 60.0f);
+    //        int nMilliSeconds = (t - (float)nSeconds) * 1000.0f;
+    //        if(nMilliSeconds > 100000)
+    //        {
+    //            nMilliSeconds = 99999;
+    //        }
+    //        return QString::number(nMinutes) + "." + QString::number(nSeconds) + ":" + QString::number(nMilliSeconds);
+    //    };
 
     std::sort(m_listLapTimes.begin(), m_listLapTimes.end());
 
     drawString(0,5, "Best Lap Time:     " + QString::number(m_listLapTimes[0]));
 
     // Display Best laptime
-//    drawString(0, 5, "LapTime: " + disp_time(m_currentLapTime));
+    //    drawString(0, 5, "LapTime: " + disp_time(m_currentLapTime));
 
-//    drawString(0, 6, "Last 3 lap: ");
-//    for(int i = 0; i < m_listLapTimes.size(); ++i)
-//    {
-//        drawString(0, 7+i, disp_time(m_listLapTimes[i]));
-//    }
+    //    drawString(0, 6, "Last 3 lap: ");
+    //    for(int i = 0; i < m_listLapTimes.size(); ++i)
+    //    {
+    //        drawString(0, 7+i, disp_time(m_listLapTimes[i]));
+    //    }
 }
 
 void GameScene::createPixmap()
@@ -411,3 +416,35 @@ void GameScene::keyReleaseEvent(QKeyEvent *event)
     }
     QGraphicsScene::keyReleaseEvent(event);
 }
+
+// -------------------------------------------------------------------------------------------------
+
+
+// -------------------------------------------------------------------------------------------------
+// GameThread
+
+GameThread::GameThread(
+    GameScene*  _m_gameScene,
+    QObject*    _parent
+):  m_gameScene(_m_gameScene),
+    QThread(_parent)
+{
+    // setScene(m_gameScene);
+    // resize(m_gameScene->sceneRect().width()+2, m_gameScene->sceneRect().height()+2);
+
+    // setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    // setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+}
+
+void GameThread::run(void)
+{
+    m_gameScene->loop();
+}
+
+GameScene* GameThread::getGameScene(void)
+{
+    qDebug() << "GameThread run launched" << "\n";
+    return (m_gameScene);
+}
+
+// -------------------------------------------------------------------------------------------------

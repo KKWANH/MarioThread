@@ -2,7 +2,8 @@
 #define VIEW_H
 
 #include <QGraphicsView>
-#include "gamescene.h"
+#include "gamethread.h"
+#include "utils.h"
 
 class View : public QGraphicsView
 {
@@ -13,7 +14,8 @@ public:
 signals:
 
 private:
-    GameScene* m_gameScene;
+    const static int PLAYER_COUNT = 2;
+    GameThread* m_gameThread[PLAYER_COUNT];
 
     // QWidget interface
 protected:
